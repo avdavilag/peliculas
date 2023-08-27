@@ -38,7 +38,7 @@ class _CastCard extends StatelessWidget {
           ),
           SizedBox(height: 5),
           Text(
-            'actor.name dkasd asasd asasd asasd',
+            'actor.name dkasd asasd andy asasd',
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           )
