@@ -1,7 +1,17 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 
+import 'package:peliculas/models/models.dart';
+
 class MovieSlider extends StatelessWidget {
-  const MovieSlider({super.key});
+  final String? title;
+  final List<Movie> movies;
+
+  const MovieSlider({
+    Key? key,
+    this.title,
+    required this.movies,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -12,21 +22,23 @@ class MovieSlider extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Text(
-              'Populares',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          //TODO: Si no hay titulo, no deben mostrar este widget
+          if (this.title != null)
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
+                this.title!,
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
             ),
-          ),
+
           const SizedBox(height: 5),
           Expanded(
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: 20,
-              itemBuilder: (_, int index) => _MoviePoster(),
-            ),
-          )
+              child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: movies.length,
+            itemBuilder: (_, int index) => _MoviePoster(movies[index]),
+          ))
         ],
       ),
     );
@@ -34,7 +46,13 @@ class MovieSlider extends StatelessWidget {
 }
 
 class _MoviePoster extends StatelessWidget {
-  @override
+//TODO: Debe esperar una pelicula
+  final Movie movies;
+
+  const _MoviePoster(
+    this.movies,
+  );
+
   Widget build(BuildContext context) {
     return Container(
       width: 130,
@@ -48,9 +66,9 @@ class _MoviePoster extends StatelessWidget {
                 arguments: 'movie-instance'),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: const FadeInImage(
-                placeholder: AssetImage('assets/no-image.jpg'),
-                image: NetworkImage('https://via.placeholder.com/300x400'),
+              child: FadeInImage(
+                placeholder: const AssetImage('assets/no-image.jpg'),
+                image: NetworkImage(movies.fullPosterImg),
                 width: 130,
                 height: 150,
                 fit: BoxFit.cover,
@@ -59,7 +77,7 @@ class _MoviePoster extends StatelessWidget {
           ),
           SizedBox(height: 5),
           Text(
-            'Startwars: El retorno del el nuevo Jedi silvestre de Monte Cristo',
+            movies.title,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,
